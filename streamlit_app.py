@@ -1753,10 +1753,10 @@ elif page == "Inventory":
     with tab1:
         # Interactive inventory editor
         st.subheader("Real-Time Inventory Dashboard")
-        
+    
         if st.session_state.inventory:
             inv_df = pd.DataFrame(st.session_state.inventory)
-            
+        
             # Add calculated fields
             inv_df["stock_status"] = inv_df.apply(
                 lambda row: (
@@ -1767,10 +1767,10 @@ elif page == "Inventory":
                     "🔵 Excess"
                 ), axis=1
             )
-            
+        
             inv_df["days_of_supply"] = inv_df.apply(
                 lambda row: (
-                    row["current_stock"] / MEDICINES.get(row["medicine"], {"refill_days": 30})["refill_days"] * 30
+                    row["current_stock"] / max(MEDICINES.get(row["medicine"], {"refill_days": 30})["refill_days"], 1) * 30
                     if row["current_stock"] > 0 else 0
                 ), axis=1
             )
