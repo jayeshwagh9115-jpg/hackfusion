@@ -337,7 +337,7 @@ def check_drug_interactions(medicines: List[str]) -> List[Dict]:
     return interactions
 
 def advanced_nlp_processing(input_text: str, context: Dict) -> Tuple[List[str], List[int], Dict]:
-    """Advanced NLP processing with context awareness"""
+    """Process natural language for medicine ordering"""
     input_text = input_text.lower().strip()
     detected_meds = []
     quantities = []
@@ -370,43 +370,29 @@ def advanced_nlp_processing(input_text: str, context: Dict) -> Tuple[List[str], 
     quantity_map = {
         "one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
         "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
-        "a": 1, "an": 1, "some": 2, "few": 3, "several": 3,
-        "dozen": 12, "half dozen": 6
+        "a": 1, "an": 1, "some": 2, "few": 3, "several": 3
     }
     
-    unit_map = {
-        "boxes": 1, "box": 1, "packs": 1, "pack": 1,
-        "bottles": 1, "bottle": 1, "tubes": 1, "tube": 1,
-        "strips": 1, "strip": 1
-    }
-    
-    # Extract quantities with units
+    # Extract quantities
     words = input_text.split()
-    for i, word in enumerate(words):
-        # Numeric quantities
+    for word in words:
         if word.isdigit():
-            qty = int(word)
-            # Check if next word is a unit
-            if i + 1 < len(words) and words[i + 1] in unit_map:
-                quantities.append(qty * unit_map[words[i + 1]])
-            else:
-                quantities.append(qty)
-        # Word quantities
+            quantities.append(int(word))
         elif word in quantity_map:
-            qty = quantity_map[word]
-            quantities.append(qty)
+            quantities.append(quantity_map[word])
     
     # Detect medicines using common names and synonyms
     for med_name, info in MEDICINES.items():
         # Check against common names
-        found = False
+        medicine_found = False
         for common_name in info["common_names"]:
             if common_name in input_text:
                 detected_meds.append(med_name)
-                found = True
+                medicine_found = True
                 break
+        
         # Check against full name if not already found
-        if not found and med_name.lower() in input_text:
+        if not medicine_found and med_name.lower() in input_text:
             detected_meds.append(med_name)
     
     # Remove duplicates while preserving order
@@ -436,7 +422,7 @@ def advanced_nlp_processing(input_text: str, context: Dict) -> Tuple[List[str], 
         quantities = quantities + [1] * (len(detected_meds) - len(quantities))
     
     return detected_meds, quantities, response_context
-
+    
 def generate_ai_response(user_input: str, medicines: List[str], quantities: List[int], 
                          context: Dict) -> Tuple[str, Dict]:
     """Generate intelligent AI response with conversation management"""
