@@ -399,12 +399,14 @@ def advanced_nlp_processing(input_text: str, context: Dict) -> Tuple[List[str], 
     # Detect medicines using common names and synonyms
     for med_name, info in MEDICINES.items():
         # Check against common names
+        found = False
         for common_name in info["common_names"]:
             if common_name in input_text:
                 detected_meds.append(med_name)
+                found = True
                 break
-        # Check against full name
-        elif med_name.lower() in input_text:
+        # Check against full name if not already found
+        if not found and med_name.lower() in input_text:
             detected_meds.append(med_name)
     
     # Remove duplicates while preserving order
