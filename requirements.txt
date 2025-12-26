@@ -1,6 +1,3 @@
-streamlit==1.29.0
-pandas==2.1.4
-numpy==1.26.2
-plotly==5.18.0
-scikit-learn==1.3.2
-python-dateutil==2.8.2
+streamlit>=1.29.0
+pandas>=2.2.0  # Version 2.2+ has Python 3.13 support
+numpy>=1.26.0
