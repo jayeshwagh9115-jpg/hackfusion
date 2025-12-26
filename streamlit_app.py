@@ -8,6 +8,7 @@ import time
 import math
 from typing import Dict, List, Tuple, Optional
 import re
+import sys  # Added missing import
 
 # Try to import optional menu
 try:
@@ -1567,7 +1568,7 @@ elif page == "Agent System":
     
     for idx, (agent_name, details) in enumerate(agent_details.items()):
         with cols[idx]:
-            status_color = "green" if details["status"] == "Active" else "orange"
+            status_color = "green" if details["status"] == "Active" else "orange" if "⚠️" in details["status"] else "red"
             
             st.markdown(f"""
             <div class="agent-card">
