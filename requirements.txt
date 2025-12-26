@@ -1,3 +1,4 @@
 streamlit>=1.29.0
-pandas>=2.2.0  # Version 2.2+ has Python 3.13 support
+pandas>=2.2.0
 numpy>=1.26.0
+streamlit-option-menu>=0.3.6
